@@ -98,16 +98,16 @@ const runValidationSuite = (): ValidationResult[] => {
     // Profile 4 assertions (Kateri Brant, Indigenous 2nd year Arts)
     if (testProfile.name === 'Kateri Brant') {
       const matchingNames = matched.map(m => m.scholarship.name);
-      const hasNeenHodgins = matchingNames.some(n => n.includes('Neen Hodgins'));
-      const hasIndspire = matchingNames.some(n => n.toLowerCase().includes('indspire'));
+      const hasNeenHodginsEntrance = matchingNames.some(n => n === 'Neen Hodgins Indigenous Continuing Admission Scholarship');
+      const hasIndigenousBursary = matchingNames.some(n => n === 'Indigenous Student Bursary');
       
-      const passed = !hasNeenHodgins && hasIndspire;
+      const passed = !hasNeenHodginsEntrance && hasIndigenousBursary;
       assertions.push({
         name: 'Indigenous & Multi-Year Check',
         passed,
         details: passed
-          ? 'Passed: Excluded Neen Hodgins (1st year only) and matched Indspire.'
-          : `Failed: Neen Hodgins matched: ${hasNeenHodgins ? 'YES' : 'NO'}, Indspire matched: ${hasIndspire ? 'YES' : 'NO'}`
+          ? 'Passed: Excluded Neen Hodgins Entrance (1st year only) and matched Indigenous Student Bursary.'
+          : `Failed: Neen Hodgins Entrance matched: ${hasNeenHodginsEntrance ? 'YES' : 'NO'}, Indigenous Student Bursary matched: ${hasIndigenousBursary ? 'YES' : 'NO'}`
       });
     }
 
