@@ -164,6 +164,7 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<'All' | 'Strong Match' | 'Possible Match' | 'Worth Exploring'>('All');
   const [sortBy, setSortBy] = useState<'score' | 'amount-desc' | 'deadline'>('score');
   const [selectedFacultyFilter, setSelectedFacultyFilter] = useState<string>('All');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Trigger search loading steps
   useEffect(() => {
@@ -196,6 +197,7 @@ export default function App() {
     setSelectedCategory('All');
     setSortBy('score');
     setSelectedFacultyFilter('All');
+    setSearchQuery('');
   };
 
   const handleReset = () => {
@@ -206,6 +208,16 @@ export default function App() {
   // Filter and sort results
   const getFilteredAndSortedResults = () => {
     let filtered = [...results];
+
+    // Filter by Search Query
+    if (searchQuery.trim() !== '') {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(r => 
+        r.scholarship.name.toLowerCase().includes(query) ||
+        r.scholarship.organization.toLowerCase().includes(query) ||
+        r.scholarship.eligibilitySummary.toLowerCase().includes(query)
+      );
+    }
 
     // Filter by Category
     if (selectedCategory !== 'All') {
@@ -640,6 +652,33 @@ export default function App() {
                     </h3>
                   </div>
 
+                  {/* Search Query Input */}
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider" htmlFor="search-input">
+                      Keyword Search
+                    </label>
+                    <div className="relative">
+                      <input
+                        id="search-input"
+                        type="text"
+                        placeholder="Search name, sponsor, etc..."
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                        className="w-full text-xs font-semibold text-slate-700 pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-purple-100 focus:border-[#4F2D7F] focus:outline-none"
+                      />
+                      <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      {searchQuery && (
+                        <button
+                          type="button"
+                          onClick={() => setSearchQuery('')}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold font-mono cursor-pointer"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
                   {/* Filter Category Tabs */}
                   <div className="space-y-2">
                     <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
@@ -712,16 +751,17 @@ export default function App() {
                   </div>
 
                   {/* Clear Filters Indicator */}
-                  {(selectedCategory !== 'All' || selectedFacultyFilter !== 'All') && (
+                  {(selectedCategory !== 'All' || selectedFacultyFilter !== 'All' || searchQuery.trim() !== '') && (
                     <button
                       type="button"
                       onClick={() => {
                         setSelectedCategory('All');
                         setSelectedFacultyFilter('All');
+                        setSearchQuery('');
                       }}
                       className="w-full py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-bold rounded-xl text-center transition-colors focus:outline-none border border-slate-200/60 cursor-pointer"
                     >
-                      Clear Active Filters
+                      Clear Active Refinements
                     </button>
                   )}
                 </div>
