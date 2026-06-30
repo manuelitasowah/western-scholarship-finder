@@ -57,24 +57,23 @@ const runValidationSuite = (): ValidationResult[] => {
       });
     }
 
-    // Profile 2 assertions (David Chen, Incoming 1st Year, Need)
+    // Profile 2 assertions (David Chen, 1st Year Engineering, Need)
     if (testProfile.name === 'David Chen') {
       const matchingNames = matched.map(m => m.scholarship.name);
       const hasSpadotto = matchingNames.some(n => n.includes('Spadotto'));
-      const hasTD = matchingNames.some(n => n.includes('TD Scholarship') && n.includes('Engineering'));
-      const hasMiles = matchingNames.some(n => n.includes('Miles'));
+      const hasBuchanan = matchingNames.some(n => n.includes('E.V. Buchanan'));
       
-      const passed = hasSpadotto && hasTD && hasMiles;
+      const passed = hasSpadotto && !hasBuchanan;
       assertions.push({
         name: 'Match First-Year Target Awards',
         passed,
         details: passed
-          ? 'Passed: Successfully matched Spadotto, TD Engineering, and James Emerson Miles.'
-          : `Failed: Missing expected matches. Spadotto: ${hasSpadotto ? 'YES' : 'NO'}, TD Engineering: ${hasTD ? 'YES' : 'NO'}, Miles: ${hasMiles ? 'YES' : 'NO'}`
+          ? 'Passed: Successfully matched Spadotto and excluded E.V. Buchanan (GPA 90%+).'
+          : `Failed: Spadotto matched: ${hasSpadotto ? 'YES' : 'NO'}, Buchanan matched: ${hasBuchanan ? 'YES' : 'NO'}`
       });
     }
 
-    // Profile 3 assertions (Amina Al-Mansoor, International Grad)
+    // Profile 3 assertions (Amina Al-Mansoor, Grad Int'l)
     if (testProfile.name === 'Amina Al-Mansoor') {
       const undergradLeaks = matched.filter(m => m.scholarship.targetDegree === 'Undergraduate');
       const domesticLeaks = matched.filter(m => {
@@ -82,10 +81,7 @@ const runValidationSuite = (): ValidationResult[] => {
         return !citizenships.includes('All') && !citizenships.includes('International student');
       });
       
-      const noUndergrad = undergradLeaks.length === 0;
-      const noDomesticOnly = domesticLeaks.length === 0;
-      const passed = noUndergrad && noDomesticOnly;
-      
+      const passed = undergradLeaks.length === 0 && domesticLeaks.length === 0;
       assertions.push({
         name: 'Exclude Undergrad & Domestic-Only Awards',
         passed,
@@ -98,16 +94,16 @@ const runValidationSuite = (): ValidationResult[] => {
     // Profile 4 assertions (Kateri Brant, Indigenous 2nd year Arts)
     if (testProfile.name === 'Kateri Brant') {
       const matchingNames = matched.map(m => m.scholarship.name);
-      const hasNeenHodginsEntrance = matchingNames.some(n => n === 'Neen Hodgins Indigenous Continuing Admission Scholarship');
-      const hasIndigenousBursary = matchingNames.some(n => n === 'Indigenous Student Bursary');
+      const hasNationalIndigenous = matchingNames.some(n => n === 'National Indigenous Scholarship');
+      const hasParentsFund = matchingNames.some(n => n === 'The Parents Fund Award In The Faculty of Arts and Humanities');
       
-      const passed = !hasNeenHodginsEntrance && hasIndigenousBursary;
+      const passed = !hasNationalIndigenous && hasParentsFund;
       assertions.push({
         name: 'Indigenous & Multi-Year Check',
         passed,
         details: passed
-          ? 'Passed: Excluded Neen Hodgins Entrance (1st year only) and matched Indigenous Student Bursary.'
-          : `Failed: Neen Hodgins Entrance matched: ${hasNeenHodginsEntrance ? 'YES' : 'NO'}, Indigenous Student Bursary matched: ${hasIndigenousBursary ? 'YES' : 'NO'}`
+          ? 'Passed: Excluded National Indigenous Scholarship (1st year only) and matched Parents Fund Arts Award.'
+          : `Failed: National Indigenous matched: ${hasNationalIndigenous ? 'YES' : 'NO'}, Parents Fund matched: ${hasParentsFund ? 'YES' : 'NO'}`
       });
     }
 

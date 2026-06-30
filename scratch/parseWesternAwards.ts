@@ -270,10 +270,29 @@ function runParser() {
       summaryLower.includes('statement') || 
       summaryLower.includes('docdrop') || 
       summaryLower.includes('nomination') || 
-      summaryLower.includes('finaid') || 
       summaryLower.includes('financial assistance');
 
     if (!hasApplicationSteps) {
+      continue;
+    }
+
+    // Skip if the ONLY application step is the generic UWO financial aid application (Finaid/index.cfm)
+    // and it does not require a custom action (like an essay, statement, reference, or resume)
+    const hasCustomAction = 
+      summaryLower.includes('essay') || 
+      summaryLower.includes('statement') || 
+      summaryLower.includes('docdrop') || 
+      summaryLower.includes('resume') || 
+      summaryLower.includes('letter') || 
+      summaryLower.includes('reference') ||
+      summaryLower.includes('nomination') || 
+      summaryLower.includes('portfolio') || 
+      summaryLower.includes('audition') ||
+      summaryLower.includes('written submission');
+
+    const isGenericFinancialAid = summaryLower.includes('finaid/index.cfm') || summaryLower.includes('online financial assistance application');
+
+    if (isGenericFinancialAid && !hasCustomAction) {
       continue;
     }
 
