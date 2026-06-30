@@ -234,6 +234,49 @@ function runParser() {
     // Create unique ID
     const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
+    // Skip discontinued/inactive/historical awards
+    const nameLower = name.toLowerCase();
+    if (nameLower.includes('discontinued') || nameLower.includes('inactive') || nameLower.includes('suspended')) {
+      continue;
+    }
+
+    // Skip if "no application required"
+    const summaryLower = eligibilitySummary.toLowerCase();
+    if (
+      summaryLower.includes('no application required') || 
+      summaryLower.includes('no application is required') ||
+      summaryLower.includes('no separate application') ||
+      summaryLower.includes('awarded automatically') ||
+      eligibilitySummary === 'No Application required.'
+    ) {
+      continue;
+    }
+
+    // Skip if description is just a dump of uppercase criteria words (indicating no actual description text exists)
+    // We check if more than 85% of characters in the description are uppercase.
+    const uppercaseLetters = (eligibilitySummary.match(/[A-Z]/g) || []).length;
+    const totalLetters = (eligibilitySummary.match(/[a-zA-Z]/g) || []).length;
+    if (totalLetters > 10 && (uppercaseLetters / totalLetters) > 0.85) {
+      continue;
+    }
+
+    // Skip if there's no mention of any application step, form, submit, apply, or docdrop
+    // (This filters out vague archives that don't tell the student how to apply)
+    const hasApplicationSteps = 
+      summaryLower.includes('apply') || 
+      summaryLower.includes('submit') || 
+      summaryLower.includes('application') || 
+      summaryLower.includes('essay') || 
+      summaryLower.includes('statement') || 
+      summaryLower.includes('docdrop') || 
+      summaryLower.includes('nomination') || 
+      summaryLower.includes('finaid') || 
+      summaryLower.includes('financial assistance');
+
+    if (!hasApplicationSteps) {
+      continue;
+    }
+
     scholarships.push({
       id,
       name,
