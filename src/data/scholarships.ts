@@ -196,7 +196,7 @@ export const SCHOLARSHIPS: Scholarship[] = [
     targetCitizenships: ['Canadian citizen', 'Permanent resident'],
     targetProvinces: ['All'],
     requiresFinancialNeed: false,
-    targetIdentities: [],
+    targetIdentities: ['Barbadian heritage'],
     targetInterests: []
   },
   {

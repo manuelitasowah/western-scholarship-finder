@@ -7,7 +7,7 @@ export interface StudentProfile {
   citizenship: 'Canadian citizen' | 'Permanent resident' | 'International student' | 'Protected/refugee status';
   province: 'Ontario' | 'Other Canadian province' | 'Outside Canada';
   financialNeed: boolean;
-  identities: string[]; // 'Indigenous', 'Black student', 'Woman', 'LGBTQ2S+', 'Student with disability', 'First-generation student'
+  identities: string[]; // 'Indigenous', 'Black student', 'Woman', 'LGBTQ2S+', 'Student with disability', 'First-generation student', 'Barbadian heritage', 'Caribbean heritage'
   interests: string[]; // 'Leadership', 'Volunteering/community service', 'Athletics', 'Arts/music', 'STEM research', 'Entrepreneurship'
 }
 

@@ -51,6 +51,17 @@ export function scoreScholarship(student: StudentProfile, scholarship: Scholarsh
     return null;
   }
 
+  // 7. Identity mismatch — hard exclude if scholarship requires specific identities
+  // and the student has NONE of them. If targetIdentities is empty, it's open to all.
+  if (scholarship.targetIdentities.length > 0) {
+    const studentHasRequiredIdentity = scholarship.targetIdentities.some(
+      identity => student.identities.includes(identity)
+    );
+    if (!studentHasRequiredIdentity) {
+      return null;
+    }
+  }
+
   const matchFactors: MatchFactor[] = [];
   let totalScore = 0;
 

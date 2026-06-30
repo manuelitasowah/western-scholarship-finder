@@ -41,6 +41,8 @@ const IDENTITIES = [
   'LGBTQ2S+',
   'Student with disability',
   'First-generation student',
+  'Barbadian heritage',
+  'Caribbean heritage',
 ];
 
 const INTERESTS = [
